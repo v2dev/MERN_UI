@@ -16,7 +16,6 @@ export default function Splash() {
   }, []);
 
     
-    // /Users/vineetkumar/Documents/Practice_New/MERN_UI/mern-ui/app/src/assets/splash.png
   return (
     <View style={styles.container}>
       <Image
