@@ -20,7 +20,7 @@ export default function CategoryContacts() {
         style={{ padding: 20 }}
         onPress={() => router.push(`/contact/${item._id}`)}
       >
-        {item.username} Hello
+        {item.username}
       </Text>
 )}
 

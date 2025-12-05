@@ -1,17 +1,17 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Button, Text, View } from "react-native";
-import { useContactDetailViewModel } from "../../src/viewmodels/useContactDetailViewModel.js";
+import { useDetailViewModel } from "../../src/viewmodels/useDetailViewModel.js";
 
 export default function ContactDetail() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const { contact, loading } = useContactDetailViewModel(id);
+  const { detailedData, loading } = useDetailViewModel(id);
 
-  if (loading || !contact) return <Text>Loading...</Text>;
+  if (loading || !detailedData) return <Text>Loading...</Text>;
 
   return (
     <View style={{ padding: 20 }}>
-      <Text>Name: {contact?.username}</Text>
+      <Text>Name: {detailedData?.username}</Text>
       <Button title="Back" onPress={() => router.back()} />
     </View>
   );

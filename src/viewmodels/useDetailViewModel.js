@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { getContactById } from "../api/contactsApi";
 
-export function useContactDetailViewModel(id) {
-  const [contact, setContact] = useState(null);
+export function useDetailViewModel(id) {
+  const [detailedData, setDetailedData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-    loadContact();
+    loadDetailedData();
   }, [id]);
 
-  const loadContact = async () => {
+  const loadDetailedData = async () => {
     setLoading(true);
     const data = await getContactById(id);
-    setContact(data.contact);
+    setDetailedData(data.contact);
     setLoading(false);
   };
 
-  return { contact, loading };
+  return { detailedData, loading };
 }
