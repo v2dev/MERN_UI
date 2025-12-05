@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { loginApi } from "../app/src/api/api";
+import { loginApi } from "../src/api/loginApi.js";
 
 // import { fetchContacts } from "../app/src/api/api"; // Path: app
 
@@ -15,7 +15,9 @@ export default function Login() {
   const onLogin = async () => {
     try {
       await loginApi({ name, email, password });
-      router.replace("/contacts");
+      // router.replace("/contacts");
+      router.replace("/categories");
+
     } catch (err) {
       Alert.alert("Login Failed", err.message);
     }

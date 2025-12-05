@@ -1,9 +1,9 @@
 import { useRouter } from "expo-router";
 import { FlatList, Text, TouchableOpacity } from "react-native";
-import { useContactsViewModel } from "../src/viewmodels/useContactsViewModel.js";
+import { useCategoriesViewModel } from "../src/viewmodels/useCategoriesViewModel.js";
 
-export default function Contacts() {
-  const { contacts, loading, error } = useContactsViewModel();
+export default function Categories() {
+  const { categories, loading, error } = useCategoriesViewModel();
   const router = useRouter();
 
   if (loading) return <Text>Loading...</Text>;
@@ -11,13 +11,13 @@ export default function Contacts() {
 
   return (
     <FlatList
-      data={contacts}
+      data={categories}
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => (
         <TouchableOpacity
-          onPress={() => router.push(`/contact/${item._id}`)}
+          onPress={() => router.push(`/category/${item._id}`)}
         >
-          <Text style={{ padding: 20 }}>{item.username}</Text>
+          <Text style={{ padding: 20 }}>{item.name}</Text>
         </TouchableOpacity>
       )}
     />
