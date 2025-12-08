@@ -7,6 +7,7 @@ export function useCategoryFirstLevelViewModel(categoryId) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log("Category ID:", categoryId);
     if (categoryId) {
       loadContacts(categoryId);
     }

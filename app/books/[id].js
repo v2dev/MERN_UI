@@ -11,7 +11,7 @@ export default function ContactDetail() {
 
   return (
     <View style={{ padding: 20 }}>
-      <Text>Name111: {detailedData?.username}</Text>
+      <Text>Book: {detailedData?.name}</Text>
       <Button title="Back" onPress={() => router.back()} />
     </View>
   );
