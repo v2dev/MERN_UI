@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { getContactById } from "../api/contactsApi";
+import { getBooksByCategory } from "../api/booksApi";
 
 export function useDetailViewModel(id) {
-  const [detailedData, setDetailedData] = useState(null);
+  const [detailedData, setDetailedData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -11,10 +11,22 @@ export function useDetailViewModel(id) {
   }, [id]);
 
   const loadDetailedData = async () => {
-    setLoading(true);
-    const data = await getContactById(id);
-    setDetailedData(data.contact);
-    setLoading(false);
+    try {
+      setLoading(true);
+
+      console.log("Loading books for category ID:", id);
+
+      const response = await getBooksByCategory(id);
+
+      console.log("Books Data Retrieved:", response);
+
+      // Extract array from response
+      setDetailedData(response.data);    // <-- use .data (array)
+    } catch (err) {
+      console.log("Error loading books:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return { detailedData, loading };

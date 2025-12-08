@@ -25,7 +25,7 @@ export default function Categories() {
 
   const routeMap = {
   contact: (id) => `/category/${id}`,
-  books: (id) => `/books/${id}`,
+  Spritiual: (id) => `/books/${id}`,
   // Add more types here...
 };
 
@@ -34,10 +34,8 @@ export default function Categories() {
   const { type, _id } = item;
 
   // If type exists in routeMap, use it.
-  
- 
   if (routeMap[type]) {
-    console.log("Navigating to:", routeMap[type](_id));
+    // console.log("Navigating to:", routeMap[type](_id));
     router.push(routeMap[type](_id));
     return;
   }
@@ -45,7 +43,6 @@ export default function Categories() {
   // Fallback route for unknown types (recommended)
   // router.push(`/generic/${type}/${_id}`);
 };
-
 
   return (
     <>

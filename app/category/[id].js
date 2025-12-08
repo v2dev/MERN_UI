@@ -7,7 +7,7 @@ export default function CategoryContacts() {
   const router = useRouter();
   const { dataList, loading, error } = useCategoryFirstLevelViewModel(id);
 
-  console.log("Category Contacts Data List New:", dataList);
+  // console.log("Category Contacts Data List New:", dataList);
 
   if (!id) return <Text>No category selected</Text>;
   if (loading) return <Text>Loading...</Text>;
