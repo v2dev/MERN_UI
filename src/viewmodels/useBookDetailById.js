@@ -2,18 +2,36 @@ import { useEffect, useState } from "react";
 import { getBookById } from "../api/booksApi";
 
 export function useBookDetailById(id) {
-  const [detailedData, setDetailedData] = useState([]);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function load() {
-      const result = await getBookById(id);
-      setDetailedData([result]);   // 🔥 wrap in array
-      setLoading(false);
-    }
+    if (!id) return;
+
+    let isActive = true; // Prevent state update after unmount
+
+    const load = async () => {
+      try {
+        setLoading(true);
+        const result = await getBookById(id);
+
+        if (isActive) {
+          setData(result);   // Store object → let UI decide array or object
+        }
+      } catch (err) {
+        if (isActive) setError(err.message || "Failed to load book");
+      } finally {
+        if (isActive) setLoading(false);
+      }
+    };
+
     load();
+
+    return () => {
+      isActive = false;
+    };
   }, [id]);
 
-  return { detailedData, loading };
+  return { data, loading, error };
 }
-

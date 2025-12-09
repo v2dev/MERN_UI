@@ -1,5 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { FlatList, Text, TouchableOpacity } from "react-native";
+import { RENDER_MAP } from "../../src/config/renderer";
+import { ROUTE_MAP } from "../../src/config/routeMap";
 import { useDetailViewModel } from "../../src/viewmodels/useDetailViewModel";
 
 /**
@@ -17,33 +19,25 @@ export default function CategoryDetailData() {
     if (!detailedData || detailedData.length === 0) return <Text>No data found</Text>;
 
     const displayContent = (type, item) => {
-      return type === "contact" ? (
-        <>
-          <Text style={{ fontWeight: "bold" }}>{item.username}</Text>
-        </>
-      ) : (
-        <>
-          <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-          <Text>{item.author}</Text>
-        </>
-      );
+      const renderer = RENDER_MAP[type];
+      if (!renderer) {
+        return <Text>Unsupported type: {type}</Text>;
+      }
+
+      return renderer(item);
     };
-  
+
     const handleItemClick = (item) => {
       const { _id } = item;
-      console.log("handleItemClick :: Navigating to book ID:", _id);
-      if (type === "contact") {
-        router.push({
-          pathname: `/contact/${_id}`,
-        });
+      const buildPath = ROUTE_MAP[type];
+
+      if (!buildPath) {
+        console.warn(`No route configured for type: ${type}`);
+        return;
       }
-        
-      if (type === "Spritiual") {
-        router.push({
-          pathname: `/books/${_id}`,
-        });
-      }
-    };
+      const path = buildPath(_id);
+      router.push(path);
+  };
 
     return (
       <FlatList

@@ -1,24 +1,20 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Button, Text, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { FlatList, Text } from "react-native";
+import { ContactItem } from "../../src/components/ContactItem.js";
 import { useContactDetailById } from "../../src/viewmodels/useContactDetailById.js";
 
 export default function ContactDetail() {
   const { id } = useLocalSearchParams();
-  const router = useRouter();
-
-  console.log(" ContactDetail :: useDetail_ViewModel - ID:", id);
   const { detailedData, loading } = useContactDetailById(id);
 
-  console.log(" Test1 :: useDetail_ViewModel - detailedData:", detailedData);
-
-  // console.log(" Test2 :: useDetail_ViewModel - ID:", id);
-
-  if (loading || !detailedData) return <Text>Loading...</Text>;
+  if (loading) return <Text>Loading...</Text>;
+  if (!detailedData) return <Text>No details found.</Text>;
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text>Name: {detailedData?.username}</Text>
-      <Button title="Back" onPress={() => router.back()} />
-    </View>
+    <FlatList
+      data={[detailedData]} // your API returns a single object, convert to array
+      keyExtractor={(item) => item._id}
+      renderItem={({ item }) => <ContactItem item={item} />}
+    />
   );
 }
