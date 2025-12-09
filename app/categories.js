@@ -5,6 +5,11 @@ import ListItem from "../src/components/ListItem";
 import { commonStyles } from "../src/styles/commonStyles";
 import { useCategoriesViewModel } from "../src/viewmodels/useCategoriesViewModel";
 
+/* 
+    This component displays a list of categories.
+    Users can star/unstar categories and navigate to different screens based on category type.
+*/
+
 export default function Categories() {
   const { categories, loading, error } = useCategoriesViewModel();
   const router = useRouter();
@@ -23,26 +28,13 @@ export default function Categories() {
     );
   };
 
-  const routeMap = {
-  contact: (id) => `/category/${id}`,
-  Spritiual: (id) => `/books/${id}`,
-  // Add more types here...
-};
-
   const handleItemPress = (item) => {
-  console.log("Item pressed:", item);
-  const { type, _id } = item;
-
-  // If type exists in routeMap, use it.
-  if (routeMap[type]) {
-    // console.log("Navigating to:", routeMap[type](_id));
-    router.push(routeMap[type](_id));
-    return;
-  }
-
-  // Fallback route for unknown types (recommended)
-  // router.push(`/generic/${type}/${_id}`);
-};
+    const { type, _id } = item;
+    router.push({
+      pathname: `/category/${_id}`,
+      params: { type }
+    });
+  };
 
   return (
     <>
@@ -59,7 +51,7 @@ export default function Categories() {
         ItemSeparatorComponent={() => <View style={commonStyles.divider} />}
         renderItem={({ item }) => (
           <ListItem
-            title={`${item.name} ${item.type}`}
+            title={`${item.name} `}
             starred={starred[item._id]}
             onPress={() => handleItemPress(item)}
             onStarToggle={() => toggleStar(item._id)}

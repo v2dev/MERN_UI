@@ -7,12 +7,13 @@ export const getBooks = async () => {
 
 export const getBookById = async (id) => {
   const res = await API.get(`/api/v1/books/${id}`);
+  // console.log("Get Book By ID API:", res.data.data);
   return res.data.data; 
 };
 
 export const getBooksByCategory = async (categoryId) => {
   const res = await API.get(`/api/v1/categories/${categoryId}/data`);
-  // console.log("Contacts by Category Response:", res.data.data);
+  // console.log("Books by Category Response:", res.data.data);
   // const res = await API.get("/api/v1/lists/contacts");
   return res.data.data; // adjust based on your backend response
 };

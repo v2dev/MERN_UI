@@ -1,30 +1,29 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { FlatList, Text, TouchableOpacity } from "react-native";
-import { useDetailViewModel } from "../../src/viewmodels/useDetailViewModel.js";
+import { useBookDetailById } from "../../src/viewmodels/useBookDetailById.js";
 
 export default function BookDetail() {
   const { id } = useLocalSearchParams();
-  console.log("BookDetail :: Category ID:", id);
-  const router = useRouter();
-  const { detailedData, loading } = useDetailViewModel(id);
+  // const router = useRouter();
 
-  if (loading || !detailedData) return <Text>Loading Data 111111...</Text>;
-  console.log("BookDetail :: Detailed Data:", detailedData);
-  console.log("BookDetail :: Loading", loading);
+  const { detailedData, loading } = useBookDetailById(id);
+
+  if (loading) return <Text>Loading...</Text>;
+  console.log("detailedData:", detailedData);
+
   return (
     <FlatList
-  data={detailedData}
-  keyExtractor={(item) => item._id}
-  renderItem={({ item }) => (
-    <TouchableOpacity
-      style={{ padding: 20, borderBottomWidth: 1, borderColor: '#ccc' }}
-      onPress={() => router.push(`/books/${item._id}`)}
-    >
-      <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-      <Text>{item.author}</Text>
-    </TouchableOpacity>
-  )}
-/>
-
+      data={detailedData}          // now array
+      keyExtractor={(item) => item._id}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          style={{ padding: 20, borderBottomWidth: 1, borderColor: "#ccc" }}
+        >
+          <Text style={{ fontWeight: "bold" }}>{item.book.name}</Text>
+          <Text>{item.book.author}</Text>
+        </TouchableOpacity>
+      )}
+    />
   );
 }
+

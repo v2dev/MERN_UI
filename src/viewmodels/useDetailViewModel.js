@@ -1,33 +1,51 @@
 import { useEffect, useState } from "react";
 import { getBooksByCategory } from "../api/booksApi";
 
-export function useDetailViewModel(id) {
+export function useDetailViewModel(id, type, enabled = true) {
   const [detailedData, setDetailedData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(enabled);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!id) return;
-    loadDetailedData();
-  }, [id]);
+    // if (!enabled) return; // 🔥 Prevent API call when disabled
 
-  const loadDetailedData = async () => {
-    try {
-      setLoading(true);
+    async function fetchData() {
+      try {
+        console.log("Calling fetch data Type", type);
+        console.log("Calling fetch data id", id);
+        setLoading(true);
+        // let response;
+        // 🔥 Your API call here
+        if(type === "Spritiual"){
+          // Fetch spiritual data
+          
+          const response = await getBooksByCategory(id);
+          // console.log("Calling fetch data response", response);
+          const data = await response.data;
+          setDetailedData(data);
+          setLoading(false);
+        }else if(type === "contact"){
+          // Fetch contact data
+          // console.log("Calling fetch data CONTACT response", response);
+            const response = await getBooksByCategory(id);
+            const data = await response.data;
+            setDetailedData(data);
+            setLoading(false);
+        }
 
-      console.log("Loading books for category ID:", id);
-
-      const response = await getBooksByCategory(id);
-
-      console.log("Books Data Retrieved:", response);
-
-      // Extract array from response
-      setDetailedData(response.data);    // <-- use .data (array)
-    } catch (err) {
-      console.log("Error loading books:", err);
-    } finally {
-      setLoading(false);
+        // Fetch other types of data
+        // const response = await fetch(`YOUR_API_URL/${id}`);
+     
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
     }
-  };
 
-  return { detailedData, loading };
+    fetchData();
+  }, [id, type, enabled]);
+
+
+
+  return { detailedData, loading, error };
 }
