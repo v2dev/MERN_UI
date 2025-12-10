@@ -22,6 +22,12 @@ export const editBook = async (id, updatedData) => {
   return res.data.data; // return updated book
 };
 
+export const createBook = async (updatedData) => {
+  const res = await API.post(`/api/v1/books`, updatedData);
+  return res.data.data; // return updated book
+};
+
+
 
 
 

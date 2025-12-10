@@ -1,3 +1,4 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback } from "react";
@@ -65,15 +66,33 @@ export default function CategoryDetailData() {
   };
 
   const handleEdit = (item) => {
-    router.push({
-      pathname: `/edit/${item._id}`,
-      params: { type },
-    });
+    console.log("handle edit called");
+    router.push(`/screens/item/${item._id}?type=${type}`);
+    // router.push({
+    //   pathname: `/edit/${item._id}`,
+    //   params: { type },
+    // });
   };
 
   return (
     <>
-      <Stack.Screen options={{ title: type }} />
+      <Stack.Screen
+        options={{
+          title: type,
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => router.push(`screens/item/new?type=${type}`)}
+            >
+              <MaterialIcons
+                name="add-circle-outline"
+                size={26}
+                color="black"
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+
       <FlatList
         data={detailedData}
         keyExtractor={(item) => item._id}
