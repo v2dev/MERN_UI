@@ -6,11 +6,10 @@ export function useDetailViewModel(id, type, enabled = true) {
   const [loading, setLoading] = useState(enabled);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    async function fetchData() {
+  async function fetchData() {
       try {
         setLoading(true);
-        if(type === "Spritiual"){
+        if(type === "Books"){
           const response = await getBooksByCategory(id);
           const data = await response.data;
           setDetailedData(data);
@@ -26,12 +25,11 @@ export function useDetailViewModel(id, type, enabled = true) {
         setError(err.message);
         setLoading(false);
       }
-    }
-
+  }
+  
+  useEffect(() => {
     fetchData();
-  }, [id, type, enabled]);
+  }, [id, type]);
 
-
-
-  return { detailedData, loading, error };
+  return { detailedData, loading, error, reload: fetchData };
 }

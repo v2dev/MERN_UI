@@ -1,4 +1,6 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback } from "react";
 import { FlatList, Text, TouchableOpacity } from "react-native";
 import { RENDER_MAP } from "../../src/config/renderer";
 import { ROUTE_MAP } from "../../src/config/routeMap";
@@ -12,20 +14,28 @@ export default function CategoryDetailData() {
     const { id, type } = useLocalSearchParams();
     const router = useRouter();
 
-    const { detailedData, loading, error } = useDetailViewModel(id, type);
+  const { detailedData, loading, error, reload } = useDetailViewModel(id, type);
+  
+    useFocusEffect(
+      useCallback(() => {
+        reload();
+    }, [id, type])
+  );
+
 
     if (loading) return <Text>Loading...</Text>;
     if (error) return <Text>{error}</Text>;
     if (!detailedData || detailedData.length === 0) return <Text>No data found</Text>;
 
+ 
+  
     const displayContent = (type, item) => {
-      const renderer = RENDER_MAP[type];
-      if (!renderer) {
-        return <Text>Unsupported type: {type}</Text>;
-      }
+        const renderer = RENDER_MAP[type];
+        if (!renderer) return <Text>Unsupported type: {type}</Text>;
 
-      return renderer(item);
+        return renderer(item, () => handleDelete(item));
     };
+
 
     const handleItemClick = (item) => {
       const { _id } = item;
@@ -37,7 +47,14 @@ export default function CategoryDetailData() {
       }
       const path = buildPath(_id);
       router.push(path);
-  };
+    };
+  
+    const handleDelete = (item) => {
+      router.push({
+        pathname: `/delete/${item._id}`,
+        params: { type },
+      });
+};
 
     return (
       <FlatList

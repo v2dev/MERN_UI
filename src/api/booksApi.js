@@ -18,6 +18,13 @@ export const getBooksByCategory = async (categoryId) => {
   return res.data.data; // adjust based on your backend response
 };
 
+export const deleteBook = async (id) => {
+  const res = await API.delete(`/api/v1/books/${id}`);
+  // console.log("Get Book By ID API:", res.data.data);
+  return res.data.data; 
+};
+
+
 
 
 
