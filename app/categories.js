@@ -38,28 +38,28 @@ export default function Categories() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "All Categories" }} />
+      <Stack.Screen options={{ title: "Categories" }} />
       {loading ? (
         <Text>Loading...</Text>
       ) : error ? (
         <Text>Error: {error}</Text>
       ) : (
-     <FlatList
-        data={categories}
-        keyExtractor={(item) => item._id}
-        style={commonStyles.screenBackground}
-        ItemSeparatorComponent={() => <View style={commonStyles.divider} />}
-        renderItem={({ item }) => (
-          <ListItem
-            title={`${item.name} `}
-            starred={starred[item._id]}
-            onPress={() => handleItemPress(item)}
-            onStarToggle={() => toggleStar(item._id)}
-            onEdit={() => console.log("Edit", item._id)}
-            onFav={() => console.log("Fav", item._id)}
-          />
-        )}
-      />
+        <FlatList
+          data={categories}
+          keyExtractor={(item) => item._id}
+          style={commonStyles.screenBackground}
+          ItemSeparatorComponent={() => <View style={commonStyles.divider} />}
+          renderItem={({ item }) => (
+            <ListItem
+              title={`${item.name} `}
+              starred={starred[item._id]}
+              onPress={() => handleItemPress(item)}
+              onStarToggle={() => toggleStar(item._id)}
+              onEdit={() => console.log("Edit", item._id)}
+              onFav={() => console.log("Fav", item._id)}
+            />
+          )}
+        />
       )}
     </>
   );
