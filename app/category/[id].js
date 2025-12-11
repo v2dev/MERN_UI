@@ -33,7 +33,8 @@ export default function CategoryDetailData() {
 
   const displayContent = (type, item) => {
     const renderer = RENDER_MAP[type];
-    if (!renderer) return <Text>Unsupported type: {type}</Text>;
+
+    if (!renderer) return <Text>Unsupported type 111: {type}</Text>;
 
     return renderer(
       item,
@@ -68,10 +69,6 @@ export default function CategoryDetailData() {
   const handleEdit = (item) => {
     console.log("handle edit called");
     router.push(`/screens/item/${item._id}?type=${type}`);
-    // router.push({
-    //   pathname: `/edit/${item._id}`,
-    //   params: { type },
-    // });
   };
 
   return (

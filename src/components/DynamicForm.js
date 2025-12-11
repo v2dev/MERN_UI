@@ -1,9 +1,15 @@
-import { View, Text, TextInput } from "react-native";
+import { Text, TextInput, View } from "react-native";
 
-export default function DynamicForm({ fields, form, onChange }) {
+export default function DynamicForm({
+  fields = [],
+  form = {},
+  onChange,
+  exclude = [],
+}) {
+  const visibleFields = fields.filter((field) => !exclude.includes(field.name));
   return (
     <View>
-      {fields.map((field) => (
+      {visibleFields.map((field) => (
         <View key={field.name} style={{ marginBottom: 15 }}>
           <Text style={{ marginBottom: 5, fontWeight: "600" }}>
             {field.label}
@@ -11,12 +17,13 @@ export default function DynamicForm({ fields, form, onChange }) {
 
           <TextInput
             value={form[field.name]}
-            onChangeText={(t) => onChange(field.name, t)}
-            keyboardType={field.keyboardType || "default"}
+            onChangeText={(value) => onChange(field.name, value)}
+            placeholder={`Enter ${field.label}`}
             style={{
               borderWidth: 1,
+              borderColor: "#ccc",
+              padding: 10,
               borderRadius: 8,
-              padding: 12,
             }}
           />
         </View>

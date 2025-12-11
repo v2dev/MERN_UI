@@ -11,7 +11,7 @@ export const ContactItem = ({ item }) => {
       }}
     >
       <Text style={{ fontWeight: "bold" }}>
-        {contact?.username || "Unknown Contact"}
+        {contact?.name || "Unknown Contact"}
       </Text>
 
       <Text>{contact?.email || "Unknown Email"}</Text>

@@ -8,8 +8,11 @@ import {
   View,
 } from "react-native";
 import { createBook, editBook, getBookById } from "../../../src/api/booksApi";
-import { createItem } from "../../../src/api/commonApi";
-import { editContact, getContactById } from "../../../src/api/contactsApi";
+import {
+  createContact,
+  editContact,
+  getContactById,
+} from "../../../src/api/contactsApi";
 import DynamicForm from "../../../src/components/DynamicForm";
 import { FORM_SCHEMA } from "../../../src/config/formSchema";
 
@@ -20,7 +23,8 @@ export default function ItemScreen() {
   console.log("ItemScreen :: id => ", id);
   console.log("ItemScreen :: type => ", type);
 
-  const normalizedType = type?.toLowerCase();
+  let type1 = "book";
+  const normalizedType = type1?.toLowerCase();
   const fields = FORM_SCHEMA[normalizedType];
 
   const router = useRouter();
@@ -46,8 +50,8 @@ export default function ItemScreen() {
 
       try {
         let data;
-        if (type === "book") data = await getBookById(id);
-        if (type === "contact") data = await getContactById(id);
+        if (type1 === "book") data = await getBookById(id);
+        if (type1 === "contact") data = await getContactById(id);
 
         setForm(data.book || data.contact);
       } finally {
@@ -55,21 +59,20 @@ export default function ItemScreen() {
       }
     }
     load();
-  }, [id, type]);
+  }, [id, type1]);
 
   const handleSave = async () => {
     setSaving(true);
-    console.log("TYPE ==> ", type);
     try {
-      if (type === "book") form.category = "69324f33a04c9da3fad45a37";
-      if (type === "contact") form.category = "69317c83043ba99b4046f7b9";
-
       if (isEdit) {
-        if (type === "book") await editBook(id, form);
-        if (type === "contact") await editContact(id, form);
+        console.log("Category updatedr");
+        form.category = "69324f33a04c9da3fad45a37";
+        if (type1 === "book") await editBook(id, form);
+        if (type1 === "contact") await editContact(id, form);
       } else {
-        if (type === "book") await createBook(form);
-        if (type === "contact") await createItem(form, type + "s");
+        form.category = "69324f33a04c9da3fad45a37";
+        if (type1 === "book") await createBook(form);
+        if (type1 === "contact") await createContact(form);
       }
 
       router.back();
@@ -89,15 +92,10 @@ export default function ItemScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
       <Text style={{ fontSize: 22, fontWeight: "bold", marginBottom: 20 }}>
-        {isEdit ? `Edit ${type}` : `Add ${type}`}
+        {isEdit ? `Edit ${type1}` : `Add ${type1}`}
       </Text>
 
-      <DynamicForm
-        fields={fields}
-        form={form}
-        onChange={updateField}
-        exclude={["genre"]}
-      />
+      <DynamicForm fields={fields} form={form} onChange={updateField} />
 
       <TouchableOpacity
         onPress={handleSave}
