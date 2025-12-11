@@ -12,10 +12,18 @@ export const getContactById = async (id) => {
 
 export const getContactsByCategory = async (categoryId) => {
   const res = await API.get(`/api/v1/lists/contacts/category/${categoryId}`);
-  // console.log("Contacts by Category Response:", res.data.data);
-  // const res = await API.get("/api/v1/lists/contacts");
   return res.data.data; // adjust based on your backend response
 };
+
+export const editContact = async (contactId, contactData) => {
+  console.log("contactsApi :: editContact :: contactId", contactId);
+  console.log("contactsApi :: editContact :: contactData", contactData);
+
+  const res = await API.put(`/api/v1/contacts/${contactId}`, contactData);
+  return res.data.data;
+};
+
+
 
 
 

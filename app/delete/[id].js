@@ -1,78 +1,41 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
-import { deleteBook } from "../../src/api/booksApi";
+import { View } from "react-native";
+import { deleteItem } from "../../src/api/commonApi";
+import ConfirmModal from "../../src/components/ConfirmModal";
 
 export default function DeleteItemScreen() {
-  const { id} = useLocalSearchParams();
+  const { id, type } = useLocalSearchParams();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+
+  const [visible, setVisible] = useState(true);
 
   const handleDelete = async () => {
-    setLoading(true);
-    setError("");
     try {
-        await deleteBook(id)
-        router.back();      // Return to previous screen
-        } catch (err) {
-            console.error(err);
-            setError("Failed to delete item. Try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+      await deleteItem(id, type + "s");
+      router.back();
+    } catch (err) {
+      console.error(err);
+      alert("Delete failed. Please try again.");
+    } finally {
+    }
+  };
 
-    return (
-        <View
-        style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 20,
-        }}
-        >
-        <Text style={{ fontSize: 20, marginBottom: 20, fontWeight: "bold" }}>
-            Confirm Delete
-        </Text>
+  const closeModal = () => {
+    setVisible(false);
+    router.back();
+  };
 
-        <Text style={{ fontSize: 16, marginBottom: 40 }}>
-            Are you sure you want to delete this item?
-        </Text>
-
-        {loading && <ActivityIndicator size="large" />}
-
-        {error ? (
-            <Text style={{ color: "red", marginBottom: 20 }}>{error}</Text>
-        ) : null}
-
-        <View style={{ flexDirection: "row", gap: 20 }}>
-            {/* Delete Button */}
-            <TouchableOpacity
-            onPress={handleDelete}
-            style={{
-                backgroundColor: "red",
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                borderRadius: 8,
-            }}
-            >
-            <Text style={{ color: "white", fontSize: 16 }}>Delete</Text>
-            </TouchableOpacity>
-
-            {/* Cancel Button */}
-            <TouchableOpacity
-            onPress={() => router.back()}
-            style={{
-                backgroundColor: "#ccc",
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                borderRadius: 8,
-            }}
-            >
-            <Text style={{ color: "black", fontSize: 16 }}>Cancel</Text>
-            </TouchableOpacity>
-        </View>
-        </View>
-    );
+  return (
+    <View style={{ flex: 1 }}>
+      <ConfirmModal
+        visible={visible}
+        title="Delete Item"
+        message={`Are you sure you want to delete this ${type}?`}
+        onCancel={closeModal}
+        onConfirm={handleDelete}
+        emoji="🗑️" // 👈 Change emoji here
+      />
+    </View>
+  );
 }

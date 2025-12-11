@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { createBook, editBook, getBookById } from "../../../src/api/booksApi";
 import { createItem } from "../../../src/api/commonApi";
-import { editContact, getContactById } from "../../../src/api/contactsApi";
+import { editContact, getContactById } from "../../../src/api/contactsApi.js";
 import DynamicForm from "../../../src/components/DynamicForm";
 import { FORM_SCHEMA } from "../../../src/config/formSchema";
 
@@ -63,6 +63,10 @@ export default function ItemScreen() {
     try {
       if (type === "book") form.category = "69324f33a04c9da3fad45a37";
       if (type === "contact") form.category = "69317c83043ba99b4046f7b9";
+
+      console.log("FORM DATA TO SAVE ==> ", form);
+      console.log("IS EDIT ==> ", isEdit);
+      console.log("editing contact");
 
       if (isEdit) {
         if (type === "book") await editBook(id, form);
