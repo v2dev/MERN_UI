@@ -1,7 +1,7 @@
+import { BookItem } from "@/components/BookItem.js";
+import { useBookDetailById } from "@/viewmodels/useBookDetailById.js";
 import { useLocalSearchParams } from "expo-router";
 import { Text } from "react-native";
-import { BookItem } from "../../src/components/BookItem.js";
-import { useBookDetailById } from "../../src/viewmodels/useBookDetailById.js";
 
 export default function BookDetail() {
   const { id } = useLocalSearchParams();

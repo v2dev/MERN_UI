@@ -1,8 +1,8 @@
+import { deleteItem } from "@/api/commonApi";
+import ConfirmModal from "@/components/ConfirmModal";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
-import { deleteItem } from "../../src/api/commonApi";
-import ConfirmModal from "../../src/components/ConfirmModal";
 
 export default function DeleteItemScreen() {
   const { id, type } = useLocalSearchParams();

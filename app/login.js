@@ -1,3 +1,5 @@
+import { loginApi } from "@/api/loginApi.js";
+import InputField from "@/components/InputField";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -8,8 +10,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { loginApi } from "../src/api/loginApi.js";
-import InputField from "../src/components/InputField";
 
 export default function Login() {
   const router = useRouter();

@@ -1,5 +1,5 @@
+import { getItemsByCategory } from "@/api/commonApi.js";
 import { useCallback, useEffect, useState } from "react";
-import { getItemsByCategory } from "../api/commonApi.js";
 
 export function useCategoryDetailViewModel(id, type, enabled = true) {
   const [detailedData, setDetailedData] = useState([]);

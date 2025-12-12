@@ -1,5 +1,5 @@
+import { theme } from "@/theme/theme";
 import { StyleSheet } from "react-native";
-import { theme } from "../theme/theme";
 
 export const commonStyles = StyleSheet.create({
   screenBackground: {

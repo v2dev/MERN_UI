@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-const imagePath = require("../src/assets/splash.png");
+const imagePath = require("@/assets/splash.png");
 
 /**
  * Splash Screen Component

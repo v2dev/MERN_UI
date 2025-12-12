@@ -1,6 +1,6 @@
+import { commonStyles } from "@/styles/commonStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";
-import { commonStyles } from "../styles/commonStyles";
 
 export default function ListItem({
   title,

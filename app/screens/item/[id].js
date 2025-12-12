@@ -1,3 +1,8 @@
+import { createBook, editBook, getBookById } from "@/api/booksApi";
+import { createItem } from "@/api/commonApi";
+import { editContact, getContactById } from "@/api/contactsApi.js";
+import DynamicForm from "@/components/DynamicForm";
+import { FORM_SCHEMA } from "@/config/formSchema";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -7,11 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { createBook, editBook, getBookById } from "../../../src/api/booksApi";
-import { createItem } from "../../../src/api/commonApi";
-import { editContact, getContactById } from "../../../src/api/contactsApi.js";
-import DynamicForm from "../../../src/components/DynamicForm";
-import { FORM_SCHEMA } from "../../../src/config/formSchema";
 
 export default function ItemScreen() {
   const { id, type } = useLocalSearchParams();

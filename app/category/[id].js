@@ -1,15 +1,12 @@
+import { fetchDataWithFavoriteOnTop, toggleFavorite } from "@/api/commonApi";
+import { RENDER_MAP } from "@/config/renderer";
+import { ROUTE_MAP } from "@/config/routeMap";
+import { useCategoryDetailViewModel } from "@/viewmodels/useCategoryDetailViewModel";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import {
-  fetchDataWithFavoriteOnTop,
-  toggleFavorite,
-} from "../../src/api/commonApi";
-import { RENDER_MAP } from "../../src/config/renderer";
-import { ROUTE_MAP } from "../../src/config/routeMap";
-import { useCategoryDetailViewModel } from "../../src/viewmodels/useCategoryDetailViewModel";
 export default function CategoryDetailData() {
   const { id, type } = useLocalSearchParams();
   const router = useRouter();

@@ -1,9 +1,9 @@
+import ListItem from "@/components/ListItem";
+import { commonStyles } from "@/styles/commonStyles";
+import { useCategoriesViewModel } from "@/viewmodels/useCategoriesViewModel";
 import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, Text, ToastAndroid, View } from "react-native";
-import ListItem from "../src/components/ListItem";
-import { commonStyles } from "../src/styles/commonStyles";
-import { useCategoriesViewModel } from "../src/viewmodels/useCategoriesViewModel";
 
 /* 
     This component displays a list of categories.

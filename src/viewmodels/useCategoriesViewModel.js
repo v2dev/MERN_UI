@@ -1,5 +1,5 @@
+import { getCategories } from "@/api/categoriesApi";
 import { useEffect, useState } from "react";
-import { getCategories } from "../api/categoriesApi";
 
 export function useCategoriesViewModel() {
   const [categories, setCategories] = useState([]);

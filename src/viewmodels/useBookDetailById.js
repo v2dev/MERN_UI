@@ -1,5 +1,5 @@
+import { getBookById } from "@/api/booksApi";
 import { useEffect, useState } from "react";
-import { getBookById } from "../api/booksApi";
 
 export function useBookDetailById(id) {
   const [data, setData] = useState(null);
@@ -17,7 +17,7 @@ export function useBookDetailById(id) {
         const result = await getBookById(id);
 
         if (isActive) {
-          setData(result);   // Store object → let UI decide array or object
+          setData(result); // Store object → let UI decide array or object
         }
       } catch (err) {
         if (isActive) setError(err.message || "Failed to load book");

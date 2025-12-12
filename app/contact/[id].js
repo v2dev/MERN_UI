@@ -1,7 +1,7 @@
+import { ContactItem } from "@/components/ContactItem.js";
+import { useContactDetailById } from "@/viewmodels/useContactDetailById.js";
 import { useLocalSearchParams } from "expo-router";
 import { FlatList, Text } from "react-native";
-import { ContactItem } from "../../src/components/ContactItem.js";
-import { useContactDetailById } from "../../src/viewmodels/useContactDetailById.js";
 
 export default function ContactDetail() {
   const { id } = useLocalSearchParams();

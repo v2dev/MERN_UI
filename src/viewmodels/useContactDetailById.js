@@ -1,5 +1,5 @@
+import { getContactById } from "@/api/contactsApi";
 import { useEffect, useState } from "react";
-import { getContactById } from "../api/contactsApi";
 
 export function useContactDetailById(id) {
   const [detailedData, setDetailedData] = useState(null);
@@ -9,7 +9,7 @@ export function useContactDetailById(id) {
     async function fetchData() {
       try {
         const response = await getContactById(id);
-        setDetailedData(response.contact); 
+        setDetailedData(response.contact);
       } catch (err) {
         console.log(err);
       } finally {
@@ -22,5 +22,3 @@ export function useContactDetailById(id) {
 
   return { detailedData, loading };
 }
-
-
