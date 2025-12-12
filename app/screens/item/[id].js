@@ -14,23 +14,21 @@ import DynamicForm from "../../../src/components/DynamicForm";
 import { FORM_SCHEMA } from "../../../src/config/formSchema";
 
 export default function ItemScreen() {
-  console.log("ItemScreen Called");
   const { id, type } = useLocalSearchParams();
-
-  console.log("ItemScreen :: id => ", id);
-  console.log("ItemScreen :: type => ", type);
 
   const normalizedType = type?.toLowerCase();
   const fields = FORM_SCHEMA[normalizedType];
 
   const router = useRouter();
 
-  const isEdit = id !== "new"; // <---- key difference
+  // Differeentiate between edit and add mode
+  const isEdit = id !== "new";
 
   const [form, setForm] = useState({});
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
 
+  // Update form fields
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
@@ -57,16 +55,12 @@ export default function ItemScreen() {
     load();
   }, [id, type]);
 
-  const handleSave = async () => {
+  const handleSaveOrAdd = async () => {
     setSaving(true);
-    console.log("TYPE ==> ", type);
     try {
+      //Todo: set dynamic category for book and contact
       if (type === "book") form.category = "69324f33a04c9da3fad45a37";
       if (type === "contact") form.category = "69317c83043ba99b4046f7b9";
-
-      console.log("FORM DATA TO SAVE ==> ", form);
-      console.log("IS EDIT ==> ", isEdit);
-      console.log("editing contact");
 
       if (isEdit) {
         if (type === "book") await editBook(id, form);
@@ -104,7 +98,7 @@ export default function ItemScreen() {
       />
 
       <TouchableOpacity
-        onPress={handleSave}
+        onPress={handleSaveOrAdd}
         disabled={saving}
         style={{
           backgroundColor: "green",

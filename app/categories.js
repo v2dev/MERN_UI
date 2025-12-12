@@ -28,11 +28,15 @@ export default function Categories() {
     );
   };
 
+  /**
+   * Handle item press based on category type
+   * @param {*} item
+   */
   const handleItemPress = (item) => {
     const { type, _id } = item;
     router.push({
       pathname: `/category/${_id}`,
-      params: { type }
+      params: { type },
     });
   };
 
@@ -55,8 +59,6 @@ export default function Categories() {
               starred={starred[item._id]}
               onPress={() => handleItemPress(item)}
               onStarToggle={() => toggleStar(item._id)}
-              onEdit={() => console.log("Edit", item._id)}
-              onFav={() => console.log("Fav", item._id)}
             />
           )}
         />

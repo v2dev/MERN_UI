@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { loginApi } from "../src/api/loginApi.js";
-import InputField from "../src/components/InputField"; // ⬅ Reusable component
+import InputField from "../src/components/InputField";
 
 export default function Login() {
   const router = useRouter();

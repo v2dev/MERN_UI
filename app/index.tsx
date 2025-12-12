@@ -4,6 +4,10 @@ import { Image, StyleSheet, View } from "react-native";
 
 const imagePath = require("../src/assets/splash.png");
 
+/**
+ * Splash Screen Component
+ * @returns 
+ */
 export default function Splash() {
   const router = useRouter();
 

@@ -12,7 +12,6 @@ export function useCategoryDetailViewModel(id, type, enabled = true) {
     setLoading(true);
     setError(null);
     try {
-      console.log("useCategoryDetailViewModel :: fetchData", id);
       const response = await getItemsByCategory(id);
       setDetailedData(response.data || []);
     } catch (err) {

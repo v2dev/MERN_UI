@@ -6,22 +6,24 @@ export const getItemsByCategory = async (categoryId) => {
 };
 
 export const createItem = async (updatedData, type) => {
-  console.log("updated Data :: ", updatedData);
-  // const res = await API.post(`/api/v1/contacts`, updatedData);
   const res = await API.post(`/api/v1/${type}`, updatedData);
   return res.data.data;
 };
 
 export const deleteItem = async (id, type) => {
-  console.log("deleteItem :: ", type);
   const res = await API.delete(`/api/v1/${type}/${id}`);
   return res.data.data;
 };
 
-// export const createBook = async (updatedData) => {
-//   const res = await API.post(`/api/v1/books`, updatedData);
-//   return res.data.data; // return updated book
-// };
+export const toggleFavorite = async (id, type) => {
+  const res = await API.patch(`/api/v1/${type}/${id}/favorite`);
+  return res.data.data;
+};
+
+export const fetchDataWithFavoriteOnTop = async (type, isToggled) => {
+  const res = await API.get(`/api/v1/${type}/favorites/top/${isToggled}`);
+  return res.data.data;
+};
 
 
 

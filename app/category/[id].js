@@ -1,25 +1,36 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback } from "react";
-import { FlatList, Text, TouchableOpacity } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  fetchDataWithFavoriteOnTop,
+  toggleFavorite,
+} from "../../src/api/commonApi";
 import { RENDER_MAP } from "../../src/config/renderer";
 import { ROUTE_MAP } from "../../src/config/routeMap";
 import { useCategoryDetailViewModel } from "../../src/viewmodels/useCategoryDetailViewModel";
-
-/**
- * This component displays detailed data for a specific category based on its type.
- */
-
 export default function CategoryDetailData() {
   const { id, type } = useLocalSearchParams();
   const router = useRouter();
 
-  const { detailedData, loading, error, reload } = useCategoryDetailViewModel(
-    id,
-    type
-  );
+  // Use local state for list to update items instantly
+  const {
+    detailedData: fetchedData,
+    loading,
+    error,
+    reload,
+  } = useCategoryDetailViewModel(id, type);
 
+  const [detailedData, setDetailedData] = useState([]);
+  const [isToggled, setIsToggled] = useState(false);
+
+  // Sync local state with fetched data
+  useEffect(() => {
+    setDetailedData(fetchedData);
+  }, [fetchedData]);
+
+  // Refresh on screen focus
   useFocusEffect(
     useCallback(() => {
       reload();
@@ -31,44 +42,95 @@ export default function CategoryDetailData() {
   if (!detailedData || detailedData.length === 0)
     return <Text>No data found</Text>;
 
+  // Render item using RENDER_MAP
   const displayContent = (type, item) => {
     const renderer = RENDER_MAP[type];
-
-    if (!renderer) return <Text>Unsupported type 111: {type}</Text>;
+    if (!renderer) return <Text>Unsupported type: {type}</Text>;
 
     return renderer(
       item,
+      () => handleStarToggle(item),
       () => handleEdit(item),
       () => handleDelete(item)
     );
   };
 
+  /**
+   * Clicks on an item to view details
+   * @param {*} item
+   * @returns
+   */
   const handleItemClick = (item) => {
     const { _id } = item;
-    console.log("category - [id].js :: handleItemClick :: item", item);
-    console.log("category - [id].js :: handleItemClick :: id", _id);
-
     const buildPath = ROUTE_MAP[type];
-
-    if (!buildPath) {
-      console.warn(`No route configured for type: ${type}`);
-      return;
-    }
-    const path = buildPath(_id);
-    console.log("category - [id].js :: handleItemClick :: path", path);
-    router.push(path);
+    if (!buildPath) return console.warn(`No route for type: ${type}`);
+    router.push(buildPath(_id));
   };
 
+  /**
+   * Handle delete action for an item
+   * @param {*} item
+   */
   const handleDelete = (item) => {
-    router.push({
-      pathname: `/delete/${item._id}`,
-      params: { type },
-    });
+    router.push({ pathname: `/delete/${item._id}`, params: { type } });
   };
 
+  /**
+   * Handle edit action for an item
+   * @param {*} item
+   */
   const handleEdit = (item) => {
-    console.log("handle edit called");
     router.push(`/screens/item/${item._id}?type=${type}`);
+  };
+
+  /**
+   * Handle star toggle action
+   * @param {*} item
+   */
+  const handleStarToggle = async (item) => {
+    // Update local state instantly
+    setDetailedData((prev) =>
+      prev.map((d) =>
+        d._id === item._id ? { ...d, favorite: !d.favorite } : d
+      )
+    );
+
+    // Call backend API
+    try {
+      await toggleFavorite(item._id, type + "s");
+    } catch (err) {
+      console.error("Toggle favorite failed:", err);
+      // Revert UI if API fails
+      setDetailedData((prev) =>
+        prev.map((d) =>
+          d._id === item._id ? { ...d, favorite: item.favorite } : d
+        )
+      );
+    }
+  };
+
+  /**
+   * Handle toggle switch to fetch data with favorites on top
+   */
+  const handleToggle = async () => {
+    // compute the NEXT value manually
+    const nextToggle = !isToggled;
+
+    // update UI instantly
+    setIsToggled(nextToggle);
+
+    try {
+      // send the NEW toggle value
+      const fetchedData = await fetchDataWithFavoriteOnTop(
+        type + "s",
+        nextToggle
+      );
+
+      setDetailedData(fetchedData.lists);
+    } catch (err) {
+      console.error("Toggle failed:", err);
+      setIsToggled(isToggled);
+    }
   };
 
   return (
@@ -77,15 +139,25 @@ export default function CategoryDetailData() {
         options={{
           title: type,
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() => router.push(`screens/item/new?type=${type}`)}
-            >
-              <MaterialIcons
-                name="add-circle-outline"
-                size={26}
-                color="black"
-              />
-            </TouchableOpacity>
+            <View style={{ flexDirection: "row", gap: 10, marginRight: 5 }}>
+              <TouchableOpacity
+                onPress={() => router.push(`screens/item/new?type=${type}`)}
+              >
+                <MaterialIcons
+                  name="add-circle-outline"
+                  size={26}
+                  color="black"
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={handleToggle}>
+                <MaterialIcons
+                  name={isToggled ? "toggle-on" : "toggle-off"}
+                  size={32}
+                  color={isToggled ? "green" : "gray"}
+                />
+              </TouchableOpacity>
+            </View>
           ),
         }}
       />
@@ -96,9 +168,10 @@ export default function CategoryDetailData() {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={{
-              padding: 20,
+              padding: 10,
               borderBottomWidth: 1,
               borderColor: "#ccc",
+              backgroundColor: "white",
             }}
             onPress={() => handleItemClick(item)}
           >

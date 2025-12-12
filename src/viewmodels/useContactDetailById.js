@@ -9,8 +9,6 @@ export function useContactDetailById(id) {
     async function fetchData() {
       try {
         const response = await getContactById(id);
-
-        // FIX: unwrap the nested object
         setDetailedData(response.contact); 
       } catch (err) {
         console.log(err);

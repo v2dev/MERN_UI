@@ -12,7 +12,7 @@ export default function ContactDetail() {
 
   return (
     <FlatList
-      data={[detailedData]} // your API returns a single object, convert to array
+      data={[detailedData]} //API returns a single object, convert to array
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => <ContactItem item={item} />}
     />

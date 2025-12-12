@@ -34,7 +34,7 @@ export default function DeleteItemScreen() {
         message={`Are you sure you want to delete this ${type}?`}
         onCancel={closeModal}
         onConfirm={handleDelete}
-        emoji="🗑️" // 👈 Change emoji here
+        emoji="🗑️"
       />
     </View>
   );
