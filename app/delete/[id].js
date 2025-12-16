@@ -1,6 +1,6 @@
 import { deleteItem } from "@/api/commonApi";
 import ConfirmModal from "@/components/ConfirmModal";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
 
@@ -27,15 +27,18 @@ export default function DeleteItemScreen() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <ConfirmModal
-        visible={visible}
-        title="Delete Item"
-        message={`Are you sure you want to delete this ${type}?`}
-        onCancel={closeModal}
-        onConfirm={handleDelete}
-        emoji="🗑️"
-      />
-    </View>
+    <>
+      <Stack.Screen options={{ title: `Delete ${type}` }} />
+      <View style={{ flex: 1 }}>
+        <ConfirmModal
+          visible={visible}
+          title="Delete Item"
+          message={`Are you sure you want to delete this ${type}?`}
+          onCancel={closeModal}
+          onConfirm={handleDelete}
+          emoji="🗑️"
+        />
+      </View>
+    </>
   );
 }

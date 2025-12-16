@@ -3,7 +3,7 @@ import { createItem } from "@/api/commonApi";
 import { editContact, getContactById } from "@/api/contactsApi.js";
 import DynamicForm from "@/components/DynamicForm";
 import { FORM_SCHEMA } from "@/config/formSchema";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -85,37 +85,45 @@ export default function ItemScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <Text style={{ fontSize: 22, fontWeight: "bold", marginBottom: 20 }}>
-        {isEdit ? `Edit ${type}` : `Add ${type}`}
-      </Text>
-
-      <DynamicForm
-        fields={fields}
-        form={form}
-        onChange={updateField}
-        exclude={["genre"]}
+    <>
+      <Stack.Screen
+        options={{
+          title: isEdit ? `Edit ${type}` : `Add ${type}`,
+          headerStyle: {
+            backgroundColor: "white", // <<< Your background color
+          },
+          headerTintColor: "#000", // optional: color for title & back icon
+        }}
       />
 
-      <TouchableOpacity
-        onPress={handleSaveOrAdd}
-        disabled={saving}
-        style={{
-          backgroundColor: "green",
-          paddingVertical: 14,
-          borderRadius: 8,
-          alignItems: "center",
-          marginTop: 10,
-        }}
-      >
-        {saving ? (
-          <ActivityIndicator size="small" color="#fff" />
-        ) : (
-          <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
-            {isEdit ? "Save Changes" : "Add Item"}
-          </Text>
-        )}
-      </TouchableOpacity>
-    </ScrollView>
+      <ScrollView contentContainerStyle={{ padding: 20 }}>
+        <DynamicForm
+          fields={fields}
+          form={form}
+          onChange={updateField}
+          exclude={["genre"]}
+        />
+
+        <TouchableOpacity
+          onPress={handleSaveOrAdd}
+          disabled={saving}
+          style={{
+            backgroundColor: "green",
+            paddingVertical: 14,
+            borderRadius: 8,
+            alignItems: "center",
+            marginTop: 10,
+          }}
+        >
+          {saving ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
+              {isEdit ? "Save Changes" : "Add Item"}
+            </Text>
+          )}
+        </TouchableOpacity>
+      </ScrollView>
+    </>
   );
 }

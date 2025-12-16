@@ -1,6 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { Text, TouchableOpacity, View } from "react-native";
-
+import { Image, Text, TouchableOpacity, View } from "react-native";
+const imagePath = "@/assets/placeholder.png";
 const iconContainer = {
   flexDirection: "row",
   alignItems: "center",
@@ -14,17 +14,33 @@ export const RENDER_MAP = {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingVertical: 1,
-        ...(item.favorite ? { backgroundColor: "lightblue" } : {}),
+        paddingVertical: 10,
+        ...(item.favorite ? { backgroundColor: "lightgrey" } : {}),
         overflow: "hidden",
         borderRadius: 18,
         paddingHorizontal: 10,
       }}
     >
-      {/* Left Section */}
-      <View>
-        <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-        <Text>{item.email}</Text>
+      {/* LEFT SECTION */}
+      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+        {/* CIRCULAR IMAGE */}
+        <Image
+          source={
+            item.coverImage ? { uri: item.coverImage } : require(imagePath)
+          }
+          style={{
+            width: 45,
+            height: 45,
+            borderRadius: 25,
+            marginRight: 10,
+          }}
+        />
+
+        {/* TEXT */}
+        <View>
+          <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+          <Text>{item.email}</Text>
+        </View>
       </View>
 
       {/* Right Section (ALL icons in one row) */}
@@ -54,20 +70,36 @@ export const RENDER_MAP = {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingVertical: 1,
-        ...(item.favorite ? { backgroundColor: "orange" } : {}),
+        paddingVertical: 10,
+        ...(item.favorite ? { backgroundColor: "lightgrey" } : {}),
         overflow: "hidden",
         borderRadius: 18,
         paddingHorizontal: 10,
       }}
     >
-      {/* Left Section */}
-      <View style={{ padding: 10 }}>
-        <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
-        <Text>{item.author}</Text>
+      {/* LEFT SECTION */}
+      <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
+        {/* CIRCULAR IMAGE */}
+        <Image
+          source={
+            item.coverImage ? { uri: item.coverImage } : require(imagePath)
+          }
+          style={{
+            width: 45,
+            height: 45,
+            borderRadius: 25,
+            marginRight: 10,
+          }}
+        />
+
+        {/* TEXT */}
+        <View>
+          <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+          <Text>{item.author}</Text>
+        </View>
       </View>
 
-      {/* Right Section (ALL icons in one row) */}
+      {/* RIGHT SECTION (icons row) */}
       <View style={iconContainer}>
         <TouchableOpacity onPress={onStarToggle}>
           <MaterialIcons

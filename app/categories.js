@@ -57,6 +57,7 @@ export default function Categories() {
             <ListItem
               title={`${item.name} `}
               starred={starred[item._id]}
+              type={item.type}
               onPress={() => handleItemPress(item)}
               onStarToggle={() => toggleStar(item._id)}
             />

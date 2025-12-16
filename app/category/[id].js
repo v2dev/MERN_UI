@@ -1,12 +1,24 @@
 import { fetchDataWithFavoriteOnTop, toggleFavorite } from "@/api/commonApi";
 import { RENDER_MAP } from "@/config/renderer";
 import { ROUTE_MAP } from "@/config/routeMap";
+import { formatType } from "@/Utils/formatType.js";
 import { useCategoryDetailViewModel } from "@/viewmodels/useCategoryDetailViewModel";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+/* 
+    This component displays detailed data for a specific category.
+    Users can view, star/unstar, edit, and delete items within the category.
+*/
 export default function CategoryDetailData() {
   const { id, type } = useLocalSearchParams();
   const router = useRouter();
@@ -86,6 +98,7 @@ export default function CategoryDetailData() {
    */
   const handleStarToggle = async (item) => {
     // Update local state instantly
+    console.log("Toggling favorite for item:", item);
     setDetailedData((prev) =>
       prev.map((d) =>
         d._id === item._id ? { ...d, favorite: !d.favorite } : d
@@ -118,11 +131,13 @@ export default function CategoryDetailData() {
 
     try {
       // send the NEW toggle value
+      console.log("Fetching data with favorite on top:", nextToggle, type);
       const fetchedData = await fetchDataWithFavoriteOnTop(
         type + "s",
         nextToggle
       );
 
+      console.log("Fetched data:", fetchedData);
       setDetailedData(fetchedData.lists);
     } catch (err) {
       console.error("Toggle failed:", err);
@@ -134,26 +149,53 @@ export default function CategoryDetailData() {
     <>
       <Stack.Screen
         options={{
-          title: type,
+          headerTitle: () => (
+            <Text style={{ fontSize: 18, marginLeft: -25 }}>
+              {formatType(type)}
+            </Text>
+          ),
+
           headerRight: () => (
-            <View style={{ flexDirection: "row", gap: 10, marginRight: 5 }}>
-              <TouchableOpacity
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginRight: 10,
+              }}
+            >
+              {/* Add Button */}
+              <Pressable
                 onPress={() => router.push(`screens/item/new?type=${type}`)}
+                android_ripple={{
+                  color: "#d0d0d0",
+                  borderless: true,
+                  radius: 20,
+                }}
+                style={{ padding: 6, marginHorizontal: 4 }}
               >
                 <MaterialIcons
                   name="add-circle-outline"
-                  size={26}
+                  size={28}
                   color="black"
                 />
-              </TouchableOpacity>
+              </Pressable>
 
-              <TouchableOpacity onPress={handleToggle}>
+              {/* Toggle Button */}
+              <Pressable
+                onPress={handleToggle}
+                android_ripple={{
+                  color: "#d0d0d0",
+                  borderless: true,
+                  radius: 20,
+                }}
+                style={{ padding: 6, marginHorizontal: 4 }}
+              >
                 <MaterialIcons
                   name={isToggled ? "toggle-on" : "toggle-off"}
-                  size={32}
+                  size={50}
                   color={isToggled ? "green" : "gray"}
                 />
-              </TouchableOpacity>
+              </Pressable>
             </View>
           ),
         }}

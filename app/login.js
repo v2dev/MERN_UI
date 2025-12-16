@@ -1,13 +1,12 @@
 import { loginApi } from "@/api/loginApi.js";
 import InputField from "@/components/InputField";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   Button,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 
@@ -52,35 +51,38 @@ export default function Login() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <View style={styles.container}>
+        {/* <Text style={styles.title}>Login</Text> */}
 
-      <InputField
-        label="Name"
-        value={form.name}
-        onChangeText={(v) => updateField("name", v)}
-      />
+        <InputField
+          label="Name"
+          value={form.name}
+          onChangeText={(v) => updateField("name", v)}
+        />
 
-      <InputField
-        label="Email"
-        keyboardType="email-address"
-        value={form.email}
-        onChangeText={(v) => updateField("email", v)}
-      />
+        <InputField
+          label="Email"
+          keyboardType="email-address"
+          value={form.email}
+          onChangeText={(v) => updateField("email", v)}
+        />
 
-      <InputField
-        label="Password"
-        secureTextEntry
-        value={form.password}
-        onChangeText={(v) => updateField("password", v)}
-      />
+        <InputField
+          label="Password"
+          secureTextEntry
+          value={form.password}
+          onChangeText={(v) => updateField("password", v)}
+        />
 
-      {loading ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <Button title="Login" onPress={onLogin} />
-      )}
-    </View>
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <Button title="Login" onPress={onLogin} />
+        )}
+      </View>
+    </>
   );
 }
 

@@ -1,20 +1,44 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Stack } from "expo-router";
+import { Image, Text, View } from "react-native";
 
 export const ContactItem = ({ item }) => {
   const contact = item;
   return (
-    <TouchableOpacity
-      style={{
-        padding: 20,
-        borderBottomWidth: 1,
-        borderColor: "#ccc",
-      }}
-    >
-      <Text style={{ fontWeight: "bold" }}>
-        {contact?.name || "Unknown Contact"}
-      </Text>
+    <>
+      <Stack.Screen options={{ title: `${contact?.name || "Details"}` }} />
 
-      <Text>{contact?.email || "Unknown Email"}</Text>
-    </TouchableOpacity>
+      <View
+        style={{
+          paddingVertical: 30,
+          alignItems: "center", // center horizontally
+          justifyContent: "center",
+        }}
+      >
+        {/* IMAGE */}
+        <Image
+          source={
+            contact?.image
+              ? { uri: contact.image }
+              : require("@/assets/placeholder.png")
+          }
+          style={{
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            marginBottom: 15,
+          }}
+        />
+
+        {/* NAME */}
+        <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 5 }}>
+          {contact?.name || "Unknown Contact"}
+        </Text>
+
+        {/* EMAIL */}
+        <Text style={{ fontSize: 16, color: "#555" }}>
+          {contact?.email || "Unknown Email"}
+        </Text>
+      </View>
+    </>
   );
 };

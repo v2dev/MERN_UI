@@ -1,3 +1,4 @@
+import { CategoryCircleIcon } from "@/components/CircleIcon";
 import { commonStyles } from "@/styles/commonStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -9,17 +10,20 @@ export default function ListItem({
   onStarToggle,
   onEdit,
   onFav,
+  type,
 }) {
   return (
     <View style={commonStyles.rowContainer}>
-      {/* LEFT SIDE */}
+      {/* LEFT CIRCULAR ICON */}
+      <CategoryCircleIcon type={type} />
+
+      {/* TITLE */}
       <TouchableOpacity style={{ flex: 1 }} onPress={onPress}>
         <Text style={commonStyles.textNormal}>{title}</Text>
       </TouchableOpacity>
 
       {/* RIGHT SIDE ICONS */}
       <View style={commonStyles.iconRow}>
-        {/* STAR */}
         <TouchableOpacity onPress={onStarToggle}>
           <Ionicons
             name={starred ? "star" : "star-outline"}

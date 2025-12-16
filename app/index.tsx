@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-const imagePath = require("@/assets/splash.png");
+const imagePath = require("@/assets/splash.jpeg");
 
 /**
  * Splash Screen Component
@@ -33,11 +33,11 @@ export default function Splash() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
   },
   image: {
-    width: 200,
-    height: 200
-  }
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
 });
+
