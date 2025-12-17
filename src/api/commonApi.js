@@ -22,8 +22,13 @@ export const toggleFavorite = async (id, type) => {
 };
 
 export const fetchDataWithFavoriteOnTop = async (type, isToggled) => {
-  // console.log("API call: fetchDataWithFavoriteOnTop", type, isToggled);
-  const res = await API.get(`/api/v1/${type}/favorites/top/${isToggled}`);
+  let URL = "";
+  if (isToggled == true) {
+    URL = `/api/v1/${type}?sort=favorite`;
+  } else {
+    URL = `/api/v1/${type}`;
+  }
+  const res = await API.get(URL);
   return res.data.data;
 };
 
