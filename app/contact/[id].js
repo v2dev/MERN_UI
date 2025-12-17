@@ -1,20 +1,15 @@
-import { ContactItem } from "@/components/ContactItem.js";
-import { useContactDetailById } from "@/viewmodels/useContactDetailById.js";
+import { ContactItem } from "@/components/ContactItem";
+import { useContactDetailById } from "@/viewmodels/useContactDetailById";
 import { useLocalSearchParams } from "expo-router";
-import { FlatList, Text } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 
-export default function ContactDetail() {
+export default function ContactDetailScreen() {
   const { id } = useLocalSearchParams();
-  const { detailedData, loading } = useContactDetailById(id);
+  const { detailedData, loading, error } = useContactDetailById(id);
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading) return <ActivityIndicator style={{ marginTop: 40 }} />;
+  if (error) return <Text>{error}</Text>;
   if (!detailedData) return <Text>No details found.</Text>;
 
-  return (
-    <FlatList
-      data={[detailedData]} //API returns a single object, convert to array
-      keyExtractor={(item) => item._id}
-      renderItem={({ item }) => <ContactItem item={item} />}
-    />
-  );
+  return <ContactItem item={detailedData} />;
 }

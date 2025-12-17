@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-const imagePath = "@/assets/placeholder.png";
+const imagePath = "@/assets/default_human.png";
+const imagePath_default = "@/assets/placeholder.png";
 const iconContainer = {
   flexDirection: "row",
   alignItems: "center",
@@ -82,7 +83,9 @@ export const RENDER_MAP = {
         {/* CIRCULAR IMAGE */}
         <Image
           source={
-            item.coverImage ? { uri: item.coverImage } : require(imagePath)
+            item.coverImage
+              ? { uri: item.coverImage }
+              : require(imagePath_default)
           }
           style={{
             width: 45,

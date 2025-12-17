@@ -6,6 +6,7 @@ export const getItemsByCategory = async (categoryId) => {
 };
 
 export const createItem = async (updatedData, type) => {
+  console.log("API call: createItem", updatedData, type);
   const res = await API.post(`/api/v1/${type}`, updatedData);
   return res.data.data;
 };
@@ -21,7 +22,7 @@ export const toggleFavorite = async (id, type) => {
 };
 
 export const fetchDataWithFavoriteOnTop = async (type, isToggled) => {
-  console.log("API call: fetchDataWithFavoriteOnTop", type, isToggled);
+  // console.log("API call: fetchDataWithFavoriteOnTop", type, isToggled);
   const res = await API.get(`/api/v1/${type}/favorites/top/${isToggled}`);
   return res.data.data;
 };
