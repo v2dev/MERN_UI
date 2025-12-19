@@ -1,4 +1,8 @@
-import { fetchDataWithFavoriteOnTop, toggleFavorite } from "@/api/commonApi";
+import {
+  fetchDataWithFavoriteOnTop,
+  fetchDataWithSearch,
+  toggleFavorite,
+} from "@/api/commonApi";
 import { RENDER_MAP } from "@/config/renderer";
 import { ROUTE_MAP } from "@/config/routeMap";
 import { formatType } from "@/Utils/formatType.js";
@@ -6,19 +10,64 @@ import { useCategoryDetailViewModel } from "@/viewmodels/useCategoryDetailViewMo
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+
 import {
   FlatList,
   Pressable,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+
+const SearchBar = React.memo(function SearchBar({
+  value,
+  onChange,
+  onClear,
+  placeholder,
+}) {
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        margin: 10,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 8,
+        backgroundColor: "#fff",
+      }}
+    >
+      <MaterialIcons name="search" size={22} color="gray" />
+
+      <TextInput
+        value={value}
+        onChangeText={onChange}
+        placeholder={placeholder}
+        autoCorrect={false}
+        style={{
+          flex: 1,
+          paddingHorizontal: 8,
+          paddingVertical: 8,
+        }}
+      />
+
+      {value.length > 0 && (
+        <Pressable onPress={onClear} hitSlop={10}>
+          <MaterialIcons name="close" size={20} color="gray" />
+        </Pressable>
+      )}
+    </View>
+  );
+});
 
 /* 
     This component displays detailed data for a specific category.
     Users can view, star/unstar, edit, and delete items within the category.
 */
+
 export default function CategoryDetailData() {
   const { id, type } = useLocalSearchParams();
   const router = useRouter();
@@ -33,11 +82,35 @@ export default function CategoryDetailData() {
 
   const [detailedData, setDetailedData] = useState([]);
   const [isToggled, setIsToggled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searching, setSearching] = useState(false);
 
   // Sync local state with fetched data
   useEffect(() => {
     setDetailedData(fetchedData);
   }, [fetchedData]);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setDetailedData(fetchedData);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      try {
+        setSearching(true);
+        console.log("Searching for:", searchQuery);
+        const res = await fetchDataWithSearch(type + "s", searchQuery);
+        setDetailedData(res?.lists || []);
+      } catch (err) {
+        console.error("Search failed", err);
+      } finally {
+        setSearching(false);
+      }
+    }, 400); // debounce delay
+
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
 
   // Refresh on screen focus
   useFocusEffect(
@@ -48,8 +121,6 @@ export default function CategoryDetailData() {
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>{error}</Text>;
-  if (!detailedData || detailedData.length === 0)
-    return <Text>No data found</Text>;
 
   // Render item using RENDER_MAP
   const displayContent = (type, item) => {
@@ -119,6 +190,14 @@ export default function CategoryDetailData() {
     }
   };
 
+  const renderEmptyState = () => (
+    <View style={{ padding: 40, alignItems: "center" }}>
+      <Text style={{ color: "gray", fontSize: 16 }}>
+        {searchQuery ? "No matching results found" : "No data available"}
+      </Text>
+    </View>
+  );
+
   /**
    * Handle toggle switch to fetch data with favorites on top
    */
@@ -131,13 +210,10 @@ export default function CategoryDetailData() {
 
     try {
       // send the NEW toggle value
-      console.log("Fetching data with favorite on top:", nextToggle, type);
       const fetchedData = await fetchDataWithFavoriteOnTop(
         type + "s",
         nextToggle
       );
-
-      console.log("Fetched data:", fetchedData);
       setDetailedData(fetchedData.lists);
     } catch (err) {
       console.error("Toggle failed:", err);
@@ -204,6 +280,17 @@ export default function CategoryDetailData() {
       <FlatList
         data={detailedData}
         keyExtractor={(item) => item._id}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
+        ListHeaderComponent={
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            onClear={() => setSearchQuery("")}
+            placeholder={`Search ${formatType(type)}...`}
+          />
+        }
+        ListEmptyComponent={renderEmptyState}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={{

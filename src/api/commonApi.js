@@ -32,6 +32,17 @@ export const fetchDataWithFavoriteOnTop = async (type, isToggled) => {
   return res.data.data;
 };
 
+// commonApi.js
+export const fetchDataWithSearch = async (type, query) => {
+  console.log("API call: fetchDataWithSearch", type, query);
+  let URL = "";
+  URL = `/api/v1/${type}?search=${query}`;
+  console.log(URL)
+
+  const res = await API.get(URL);
+  return res.data.data;
+};
+
 
 
 
